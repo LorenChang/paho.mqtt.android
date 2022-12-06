@@ -17,6 +17,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.widget.Toast;
 
@@ -53,8 +54,14 @@ class Notify {
     String ticker = contentTitle + " " + messageString;
 
     //build the pending intent that will start the appropriate activity
-    PendingIntent pendingIntent = PendingIntent.getActivity(context,
-            0, intent, 0);
+    PendingIntent pendingIntent;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      pendingIntent = PendingIntent.getActivity(context,
+              0, intent, PendingIntent.FLAG_IMMUTABLE);
+    } else {
+      pendingIntent = PendingIntent.getActivity(context,
+              0, intent, 0);
+    }
 
     //build the notification
     Builder notificationCompat = new Builder(context);
